@@ -1,0 +1,32 @@
+package com.app.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
+@Service
+public class EmailService {
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+
+	public void sendVerificationEmail(String toEmail, String userName, String token) {
+		// TODO Auto-generated method stub
+		 String verifyLink = "http://localhost:8080/api/auth/verify-email?token=" + token;
+
+		    SimpleMailMessage message = new SimpleMailMessage();
+		    message.setFrom("ashubarrownz63@gmail.com");
+		    message.setTo(toEmail);
+		    message.setSubject("Verify Your Email");
+		    message.setText("Hi " + userName + ",\n\n"
+		        + "Please click the link below to verify your email:\n\n"
+		        + verifyLink + "\n\n"
+		        + "This link is valid for one-time use only.\n\n"
+		        + "If you did not register, ignore this email.");
+
+		    mailSender.send(message);
+		    System.out.println("=== Verification email sent to: " + toEmail);
+	}
+}
